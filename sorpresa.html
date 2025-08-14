@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regalo Virtual</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #330000, #000000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+  }
+
+  .gift-container {
+    position: relative;
+    text-align: center;
+  }
+
+  /* Caja */
+  .gift-box {
+    width: 180px;
+    height: 180px;
+    background: linear-gradient(45deg, #ff0000, #990000);
+    border-radius: 15px;
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    animation: bounce 2s infinite;
+  }
+
+  /* Lazo */
+  .ribbon {
+    position: absolute;
+    width: 200px;
+    height: 20px;
+    background: black;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+    z-index: 2;
+    transition: all 1s ease;
+  }
+  .ribbon:before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 80px;
+    background: black;
+    top: -30px;
+    left: 80px;
+    transform: rotate(45deg);
+    transition: all 1s ease;
+  }
+  .ribbon:after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 80px;
+    background: black;
+    top: -30px;
+    left: 80px;
+    transform: rotate(-45deg);
+    transition: all 1s ease;
+  }
+
+  /* Animación al abrir la caja */
+  .gift-box.open {
+    transform: rotateX(180deg);
+    animation: none;
+  }
+  .gift-box.open .ribbon {
+    transform: translateY(-50%) rotate(720deg) scale(0.5);
+    opacity: 0.7;
+  }
+  .gift-box.open .ribbon:before {
+    transform: rotate(120deg) translateY(-50px) scale(0.5);
+    opacity: 0.5;
+  }
+  .gift-box.open .ribbon:after {
+    transform: rotate(-120deg) translateY(-50px) scale(0.5);
+    opacity: 0.5;
+  }
+
+  /* Mensajes */
+  .message {
+    display: none;
+    margin-top: 20px;
+    font-size: 26px;
+    color: #ff5555;
+    font-weight: bold;
+    text-shadow: 2px 2px #000;
+  }
+  .message.show {
+    display: block;
+    animation: fadeIn 1s forwards;
+  }
+
+  .small-text {
+    display: none;
+    font-size: 20px;
+    color: #ffff66;
+    font-weight: bold;
+    text-shadow: 2px 2px #990000;
+    margin-bottom: 10px;
+    animation: highlight 1s forwards;
+  }
+  .small-text.show {
+    display: block;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes highlight {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Confeti */
+  .confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: gold;
+    top: 0;
+    animation: fall 3s linear infinite;
+    border-radius: 50%;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity:1; }
+    100% { transform: translateY(500px) rotate(360deg); opacity:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="gift-container">
+  <div class="gift-box" id="giftBox">
+    <div class="ribbon"></div>
+  </div>
+  <div class="small-text" id="smallText">Te amo cosita rica 💖</div>
+  <div class="message" id="message">
+    ¡Hola nena, mujer mía! ❤️ Tu sorpresa está aquí 🎁
+  </div>
+</div>
+
+<script>
+  const giftBox = document.getElementById('giftBox');
+  const message = document.getElementById('message');
+  const smallText = document.getElementById('smallText');
+  const giftContainer = document.querySelector('.gift-container');
+
+  giftBox.addEventListener('click', () => {
+    giftBox.classList.add('open');
+    setTimeout(() => {
+      smallText.classList.add('show'); // Aparece el texto pequeño destacado
+      message.classList.add('show');   // Aparece el mensaje principal
+      launchConfetti(50);              // Lanza 50 confetis
+    }, 1000);
+  });
+
+  function launchConfetti(amount) {
+    for(let i=0; i<amount; i++){
+      const confetti = document.createElement('div');
+      confetti.classList.add('confetti');
+      confetti.style.left = Math.random() * window.innerWidth + 'px';
+      confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
+      confetti.style.animationDuration = (2 + Math.random()*3) + 's';
+      giftContainer.appendChild(confetti);
+
+      setTimeout(() => {
+        confetti.remove();
+      }, 4000);
+    }
+  }
+</script>
+
+</body>
+</html>
